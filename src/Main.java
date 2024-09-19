@@ -32,7 +32,7 @@ public class Main {
         estado_inicial = processo.estado_inicial();
         estado_final = processo.estado_final();
         
-        System.out.println("Autômato registrado com sucesso!");
+        System.out.println("Autômato registrado com sucesso!\n");
         scanner.close();
         processo.print_all(num_estados, alfabeto, estado_inicial, estado_final, transicoes);
 

@@ -46,6 +46,6 @@ public class Maquina {
         for (Map.Entry<String, List<String>> entry : transicoes.entrySet()) {
             System.out.println("Transições do estado " + entry.getKey() + ": " + entry.getValue());
         }
-        System.out.println("--------------------------------------");
+        System.out.println("--------------------------------------\n");
     }
 }

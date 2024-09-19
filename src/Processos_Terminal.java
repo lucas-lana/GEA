@@ -150,6 +150,7 @@ public class Processos_Terminal {
                 }
             }
         }
+        System.out.println("--------------------------------------");
     }       
 
     public Map<String, List<String>> transicoes(int num_estados, List<String> alfabeto) {
@@ -190,38 +191,14 @@ public class Processos_Terminal {
 
             // Loop para as transições
             for (int j = 0; j < num_transicoes; j++) {
-                String simbolo = "";
                 String destino = "";
-
-                // Loop para o símbolo da transição
-                while (true) {
-                    try {
-                        System.out.print("Digite o símbolo da transição " + (j + 1) + ": ");
-                        simbolo = scanner.nextLine();
-                        if (!simbolo.isEmpty() && alfabeto.contains(simbolo)) {
-                            break; // Sai do loop se o símbolo for válido
-                        } else if (!alfabeto.contains(simbolo)) {
-                            System.out.println("O símbolo da transição deve estar no alfabeto.");
-                            System.out.println("Alfabeto: " + alfabeto);
-                            System.out.println("--------------------------------------");
-                            atraso(250);
-                        } else {
-                            System.out.println("O símbolo da transição não pode ser vazio.");
-                            System.out.println("--------------------------------------");
-                            atraso(250);
-                        }
-                    } catch (Exception e) {
-                        System.out.println("Erro ao inserir o símbolo da transição.");
-                        scanner.nextLine(); // Limpa a entrada inválida do buffer
-                        System.out.println("--------------------------------------");
-                        atraso(250);
-                    }
-                }
+                System.out.println("--------------------------------------");
+                System.out.println("Estado atual: " + estados.get(i));
 
                 // Loop para o estado de destino da transição
                 while (true) {
                     try {
-                        System.out.print("Digite o estado de destino da transição " + (j + 1) + ": ");
+                        System.out.print("Símbolo: " + alfabeto.get(j) + "\nEstado de Destino: ");
                         destino = scanner.nextLine();
                         if (!destino.isEmpty() && estados.contains(destino)) {
                             break; // Sai do loop se o destino for válido
@@ -243,8 +220,9 @@ public class Processos_Terminal {
                     }
                 }
 
-                transicoes.get(estados.get(i)).add(simbolo + " -> " + destino);
+                transicoes.get(estados.get(i)).add(alfabeto.get(j) + " -> " + destino);
             }
+            System.out.println("--------------------------------------");
         }
         return transicoes;
     }
@@ -258,7 +236,7 @@ public class Processos_Terminal {
         for (Map.Entry<String, List<String>> entry : transicoes.entrySet()) {
             System.out.println("Transições do estado " + entry.getKey() + ": " + entry.getValue());
         }
-        System.out.println("--------------------------------------");
+        System.out.println("--------------------------------------\n");
         atraso(1000);
     }
 
