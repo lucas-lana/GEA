@@ -6,12 +6,12 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Map;
 
-public class Processos_Terminal {
+public class Input_Terminal {
     private Scanner scanner;
     public List<String> alfabeto = new ArrayList<>();
     public List<String> estados = new ArrayList<>();
 
-    public Processos_Terminal(Scanner scanner) {
+    public Input_Terminal(Scanner scanner) {
         this.scanner = scanner;
     }
 
@@ -29,10 +29,22 @@ public class Processos_Terminal {
         if (this.alfabeto.contains("")) {
             this.alfabeto.remove(alfabeto.indexOf(""));
         }
+
     }
 
     public void estados() {
-        this.estados = receber_lista("nomes dos estados");
+        List<String> aux = new ArrayList<>();
+        aux = receber_lista("nomes dos estados");
+        for (String estado : aux) {
+            if (!this.estados.contains(estado))
+                this.estados.add(estado);
+            else {
+                System.out.println("O estado " + estado + " foi digitado mais de uma vez.");
+                System.out.println("Não é permitido estados duplicados. Deletando a duplicata.");
+                System.out.println("--------------------------------------");
+                atraso(250);
+            }
+        }
         if (this.estados.contains("")) {
             this.estados.remove(this.estados.indexOf(""));
         }
@@ -42,7 +54,7 @@ public class Processos_Terminal {
         String string_bruta;
         while (true) {
             try {
-                System.out.print("Digite os(as) "+ tipoLista +", separados(das) por vírgula: ");
+                System.out.print("Digite os(as) "+ tipoLista +", separados(das) por vírgula ou espaço: ");
                 string_bruta = scanner.nextLine();
                 if (!string_bruta.isEmpty()) {
                     break; // Sai do loop se os estados forem válidos
@@ -58,6 +70,7 @@ public class Processos_Terminal {
                 atraso(250);
             }
         }
+        string_bruta = string_bruta.replace(" ", ",");
         return List.of(string_bruta.split(","));
     }
 

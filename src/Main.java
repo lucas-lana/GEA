@@ -1,4 +1,6 @@
 package src;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,24 +15,120 @@ public class Main {
         List<String> alfabeto = new ArrayList<>();
         Map<String, List<String>> transicoes;
 
-        Processos_Terminal processo = new Processos_Terminal(scanner);
+        Input_Terminal input = new Input_Terminal(scanner);
 
         // Parte inicial do programa com tratamento de erros
         System.out.println("Bem vindo ao gerador de esquemas de autômatos finitos!\nPara começar, registre o autômato.");
         System.out.println("--------------------------------------");
 
-        processo.estados();
-        processo.alfabeto();
-        alfabeto = processo.alfabeto;
-        transicoes = processo.transicoes();
-        estado_inicial = processo.estado_inicial();
-        estado_final = processo.estado_final();
-        scanner.close();
+        input.estados();
+        input.alfabeto();
+        alfabeto = input.alfabeto;
+        transicoes = input.transicoes();
+        estado_inicial = input.estado_inicial();
+        estado_final = input.estado_final();
+
         System.out.println("--------------------------------------");
         System.out.println("Autômato registrado com sucesso!\n");
-        processo.print_all(alfabeto, estado_inicial, estado_final, transicoes);
+        input.print_all(alfabeto, estado_inicial, estado_final, transicoes);
 
-        Maquina maquina = new Maquina(estado_inicial,estado_final,processo.get_estados(),alfabeto,transicoes);
-        maquina.print_all();
+        Gerador automato = new Gerador(estado_inicial,estado_final,input.get_estados(),alfabeto,transicoes,scanner);
+        //automato.print_all();
+        
+        Salvar_Arquivo(scanner,automato.gerador_String_AFD());
+        scanner.close();
+    }
+
+
+    // Função para salvar o arquivo
+    public static void Salvar_Arquivo(Scanner leitor, String conteudo) {
+        String nomeArquivo;
+        String salvar;
+
+        // Pergunta ao usuário se deseja salvar o arquivo
+        while (true) {
+            try {
+                System.out.println("Deseja salvar o arquivo com as informações do autômato? (S/N): ");
+                salvar = leitor.nextLine().trim().toUpperCase();
+
+                // Valida a entrada
+                if (salvar.equals("S") || salvar.equals("N")) {
+                    break;
+                } else {
+                    System.out.println("Opção inválida");
+                }
+            } catch (Exception e) {
+                System.out.println("Erro ao inserir a opção.");
+                System.out.println("--------------------------------------");
+            }
+        }
+
+        // Se o usuário escolher 'N', cancela a operação
+        if (salvar.equals("N")) {
+            System.out.println("Operação cancelada. O arquivo não foi salvo.");
+            return;
+        }
+
+        // Loop para escolha do nome e verificação de sobrescrita
+        while (true) {
+            try {
+                // Pergunta o nome do arquivo ao usuário
+                System.out.println("Digite o nome do arquivo (sem extensão): ");
+                nomeArquivo = leitor.nextLine().trim();
+
+                if (nomeArquivo.isEmpty()) {
+                    System.out.println("Nome do arquivo inválido");
+                } else {
+                    nomeArquivo += ".txt";
+                    System.out.println("Nome do arquivo: " + nomeArquivo);
+                    System.out.println("--------------------------------------");
+
+                    // Verifica se o arquivo já existe
+                    File arquivo = new File(nomeArquivo);
+                    if (arquivo.exists()) {
+                        while (true) {
+                            try {
+                                System.out.println("O arquivo '" + nomeArquivo + "' já existe. Deseja sobrescrever? (S/N): ");
+                                String sobrescrever = leitor.nextLine().trim().toUpperCase();
+
+                                // Valida a opção de sobrescrever
+                                if (sobrescrever.equals("S")) {
+                                    break; // Sai do loop de sobrescrita
+                                } else if (sobrescrever.equals("N")) {
+                                    System.out.println("Escolha outro nome para o arquivo.");
+                                    break; // Sai do loop de sobrescrita e volta para pedir o nome do arquivo
+                                } else {
+                                    System.out.println("Opção inválida");
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Erro ao inserir a opção.");
+                                System.out.println("--------------------------------------");
+                            }
+                        }
+                        if (arquivo.exists()) {
+                            continue; // Volta para o loop de nome de arquivo se o arquivo já existir e não for sobrescrito
+                        }
+                    } else {
+                        break; // Sai do loop de nome de arquivo se não houver conflito
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Erro ao inserir o nome do arquivo.");
+                System.out.println("--------------------------------------");
+            }
+        }
+
+        // Chama a função para salvar no arquivo
+        salvarArquivo(nomeArquivo, conteudo);
+    }
+
+    // Função para salvar o arquivo
+    public static void salvarArquivo(String nomeArquivo, String conteudo) {
+        try (FileWriter escritor = new FileWriter(nomeArquivo)) {
+            escritor.write(conteudo);
+            System.out.println("Arquivo '" + nomeArquivo + "' foi salvo com sucesso!");
+        } catch (IOException e) {
+            System.out.println("Ocorreu um erro ao salvar o arquivo: " + e.getMessage());
+        }
     }
 }
