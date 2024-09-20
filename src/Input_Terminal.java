@@ -1,7 +1,9 @@
 package src;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Map;
@@ -145,16 +147,16 @@ public class Input_Terminal {
         return transicoes;
     }
 
-    public String estado_inicial() {
-        String estado_inicial = "";
+    public List<String> estado_inicial() {
+        List<String> estados_iniciais = new ArrayList<>();
         // Loop para o estado inicial
         while (true) {
             try {
-                System.out.print("Digite o estado inicial do autômato: ");
-                estado_inicial = scanner.nextLine();
-                if (!estado_inicial.isEmpty() && this.estados.contains(estado_inicial)) {
+                System.out.print("Digite o(s) estado(s) inicial(ais) do autômato, separados por vírgula ou espaço: ");
+                estados_iniciais = tratamento_lista(scanner.nextLine());
+                if (!estados_iniciais.isEmpty() && this.estados.containsAll(estados_iniciais)) {
                     break; // Sai do loop se o estado inicial for válido
-                } else if (!this.estados.contains(estado_inicial)) {
+                } else if (!this.estados.containsAll(estados_iniciais)) {
                     System.out.println("O estado inicial deve estar na lista de estados.");
                     System.out.println("Estados: " + this.estados);
                     System.out.println("--------------------------------------");
@@ -171,18 +173,23 @@ public class Input_Terminal {
                 atraso(250);
             }
         }
-        return estado_inicial;
+        return estados_iniciais;
     }
 
-    public String estado_final() {
-        String estado_final = "";
+    public List<String> estado_final() {
+        List<String> estados_finais = new ArrayList<>();
         // Loop para o estado final
         while (true) {
             try {
-                System.out.print("Digite o estado final do autômato: ");
-                estado_final = scanner.nextLine();
-                if (!estado_final.isEmpty() && this.estados.contains(estado_final)) {
+                System.out.print("Digite o(s) estado(s) final(ais) do autômato: ");
+                estados_finais = tratamento_lista(scanner.nextLine());
+                if (!estados_finais.isEmpty() && this.estados.containsAll(estados_finais)) {
                     break; // Sai do loop se o estado final for válido
+                } else if (!this.estados.containsAll(estados_finais)) {
+                    System.out.println("O estado final deve estar na lista de estados.");
+                    System.out.println("Estados: " + this.estados);
+                    System.out.println("--------------------------------------");
+                    atraso(250);
                 } else {
                     System.out.println("O estado final não pode ser vazio.");
                     System.out.println("--------------------------------------");
@@ -195,10 +202,10 @@ public class Input_Terminal {
                 atraso(250);
             }
         }
-        return estado_final;
+        return estados_finais;
     }
 
-    public void print_all(List<String> alfabeto, String estado_inicial, String estado_final, Map<String,List<String>> transicoes) {
+    public void print_all(List<String> alfabeto, List<String> estado_inicial, List<String> estado_final, Map<String,List<String>> transicoes) {
         System.out.println("------ Informações do autômato ------");
         System.out.println("Quantidade de estados: " + this.estados.size());
         System.out.println("Alfabeto: " + alfabeto);
@@ -213,5 +220,19 @@ public class Input_Terminal {
 
     public List<String> get_estados() {
         return this.estados;
+    }
+
+    private List<String> tratamento_lista(String lista_bruta) {
+        List <String> lista_tratada = new ArrayList<>();
+
+        lista_bruta = lista_bruta.replace(" ", ",");
+        lista_tratada = List.of(lista_bruta.split(","));
+
+        if (lista_tratada.contains("")) {
+            lista_tratada.remove(lista_tratada.indexOf(""));
+        }
+
+        Set <String> lista_final = new HashSet<>(lista_tratada);
+        return new ArrayList<>(lista_final);
     }
 }

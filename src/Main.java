@@ -10,8 +10,8 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(System.in);
-        String estado_inicial;
-        String estado_final;
+        List<String> estado_inicial;
+        List<String> estado_final;
         List<String> alfabeto = new ArrayList<>();
         Map<String, List<String>> transicoes;
 
@@ -41,7 +41,7 @@ public class Main {
 
 
     // Função para salvar o arquivo
-    public static void Salvar_Arquivo(Scanner leitor, String conteudo) {
+    public static void Salvar_Arquivo(Scanner leitor, String conteudo) throws IOException {
         String nomeArquivo;
         String salvar;
 
@@ -66,7 +66,8 @@ public class Main {
         // Se o usuário escolher 'N', cancela a operação
         if (salvar.equals("N")) {
             System.out.println("Operação cancelada. O arquivo não foi salvo.");
-            return;
+            Menus menu = new Menus(leitor);
+            menu.Menu_Reinicia();
         }
 
         // Loop para escolha do nome e verificação de sobrescrita

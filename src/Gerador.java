@@ -7,17 +7,17 @@ import java.util.Scanner;
 
 public class Gerador {
     public Scanner scanner;
-    private String Estado_inicial;
-    private String Estado_final;
+    private List<String> Estados_iniciais;
+    private List<String> Estados_finais;
     private List<String> estados;
     private List<String> alfabeto;
     private Map<String,List<String>> transicoes;
 
-    public Gerador(String Estado_inicial, String         Estado_final,List<String> estados, List<String> alfabeto, Map<String,List<String>> transicoes, Scanner scanner) {
+    public Gerador(List<String> Estado_inicial, List<String> Estado_final,List<String> estados, List<String> alfabeto, Map<String,List<String>> transicoes, Scanner scanner) {
         this.estados = estados;
         this.alfabeto = alfabeto;
-        this.Estado_inicial = Estado_inicial;
-        this.Estado_final = Estado_final;
+        this.Estados_iniciais = Estado_inicial;
+        this.Estados_finais = Estado_final;
         this.transicoes = transicoes;
         this.scanner = scanner;
     }
@@ -31,10 +31,10 @@ public class Gerador {
         for (String transicao : arquivoStringAuxList) {
             // Dividindo a string na parte "estadoOrigem -> estadoDestino" e "símbolo"
             transicao = transicao.trim();
-            String[] partes = transicao.split("|");
+            String[] partes = transicao.split(" ");
             String estadoOrigem = partes[0];
-            String estadoDestino = partes[5];
-            String simbolo = partes[9];
+            String estadoDestino = partes[2];
+            String simbolo = partes[4];
 
             // Agrupar os símbolos pelo estado de origem e destino
             agrupamento
@@ -66,11 +66,21 @@ public class Gerador {
     public String gerador_String_AFD() {
         String arquivoString = "";
         String aux = "";
-        arquivoString += "Q: ";
+        arquivoString += "Q:";
         for (String estado : this.estados) {
-            arquivoString += estado + " ";
+            arquivoString += " " + estado;
         }
-        arquivoString += "\nI: " + this.Estado_inicial + "\nF: " + this.Estado_final + "\n";
+
+        arquivoString += "\nI:";
+        for (String estado_inicial : this.Estados_iniciais) {
+            arquivoString += " " + estado_inicial;
+        }
+
+        arquivoString += "\nF:";
+        for (String estado_final : this.Estados_finais) {
+            arquivoString += " " + estado_final;
+        }
+        arquivoString += "\n";
         
         for (Map.Entry<String, List<String>> entry : transicoes.entrySet()) {
             for (String transicao : entry.getValue()) {
@@ -102,6 +112,7 @@ public class Gerador {
                 if (imprimir.equals("S") || imprimir.equals("N") && !imprimir.isEmpty()) {
                     if (imprimir.equals("S")) {
                         System.out.println(arquivoString);
+                        System.out.println("--------------------------------------");
                         break;
                     }
                     break;
@@ -119,10 +130,10 @@ public class Gerador {
         return arquivoString;
     }
 
-        public void print_all() {
+    public void print_all() {
         System.out.println("------ Informações do autômato ------");
-        System.out.println("Estado inicial: " + this.Estado_inicial);
-        System.out.println("Estado final: " + this.Estado_final);
+        System.out.println("Estado inicial: " + this.Estados_iniciais);
+        System.out.println("Estado final: " + this.Estados_finais);
         System.out.println("Estados: " + this.estados);
         System.out.println("Alfabeto: " + this.alfabeto);
         for (Map.Entry<String, List<String>> entry : transicoes.entrySet()) {
