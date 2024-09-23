@@ -24,19 +24,18 @@ public class Main {
         System.out.println("--------------------------------------");
         menu.Menu_Instruções();
 
-        input.estados();
-        input.alfabeto();
-        estado_inicial = input.estado_inicial();
-        estado_final = input.estado_final();
-        input.Tipo_Determinismo(estado_inicial, estado_final);
+        input.get_estados();;
+        input.get_alfabeto();
+        estado_inicial = input.get_estados_inicias();
+        estado_final = input.get_estados_finais();
         alfabeto = input.alfabeto;
-        transicoes = input.transicoes();
+        transicoes = input.get_transicoes();
 
         System.out.println("--------------------------------------");
         System.out.println("Autômato registrado com sucesso!\n");
         input.print_all(alfabeto, estado_inicial, estado_final, transicoes);
 
-        Gerador automato = new Gerador(estado_inicial,estado_final,input.get_estados(),alfabeto,transicoes,scanner,input.determinístico);
+        Gerador automato = new Gerador(estado_inicial,estado_final,input.estados,alfabeto,transicoes,scanner,input.determinístico);
         //automato.print_all();
         
         Salvar_Arquivo(scanner,automato.gerador_String_AFD(),menu);
