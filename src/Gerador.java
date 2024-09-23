@@ -7,19 +7,21 @@ import java.util.Scanner;
 
 public class Gerador {
     public Scanner scanner;
+    private boolean determinístico;
     private List<String> Estados_iniciais;
     private List<String> Estados_finais;
     private List<String> estados;
     private List<String> alfabeto;
     private Map<String,List<String>> transicoes;
 
-    public Gerador(List<String> Estado_inicial, List<String> Estado_final,List<String> estados, List<String> alfabeto, Map<String,List<String>> transicoes, Scanner scanner) {
+    public Gerador(List<String> Estado_inicial, List<String> Estado_final,List<String> estados, List<String> alfabeto, Map<String,List<String>> transicoes, Scanner scanner, boolean determinístico) {
         this.estados = estados;
         this.alfabeto = alfabeto;
         this.Estados_iniciais = Estado_inicial;
         this.Estados_finais = Estado_final;
         this.transicoes = transicoes;
         this.scanner = scanner;
+        this.determinístico = determinístico;
     }
 
     public String Agrupar(List<String> arquivoStringAuxList) {
@@ -109,6 +111,7 @@ public class Gerador {
                 System.out.println("Deseja imprimir o esquma no terminal? (S/N): ");
                 String imprimir = scanner.nextLine();
                 imprimir = imprimir.toUpperCase();
+                System.out.println("--------------------------------------\n");
                 if (imprimir.equals("S") || imprimir.equals("N") && !imprimir.isEmpty()) {
                     if (imprimir.equals("S")) {
                         System.out.println(arquivoString);

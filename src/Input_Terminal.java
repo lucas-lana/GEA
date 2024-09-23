@@ -4,7 +4,6 @@ import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +11,7 @@ public class Input_Terminal {
     private Scanner scanner;
     public List<String> alfabeto = new ArrayList<>();
     public List<String> estados = new ArrayList<>();
+    public boolean determinístico;
 
     public Input_Terminal(Scanner scanner) {
         this.scanner = scanner;
@@ -79,68 +79,78 @@ public class Input_Terminal {
     public Map<String, List<String>> transicoes() {
         Map<String, List<String>> transicoes = new HashMap<>();
         
+        String[] lista_estado_erro = {"ERRO", "NÃO", "NULL", "N", " ","NÃO TEM",
+        "NÃO TEM ESTADO", "NÃO TEM ESTADO DE DESTINO, ESTADO DE ERRO","NAO",
+        "NAO TEM","NAO TEM ESTADO","NAO TEM ESTADO DE DESTINO, ESTADO DE ERRO",
+        "NÃO TÊM ESTADO DE DESTINO","NÃO TÊM ESTADO DE DESTINO, ESTADO DE ERRO",
+        "NÃO TÊM, NÃO TÊM ESTADO DE DESTINO"};
+        
         for (int i = 0; i < this.estados.size(); i++) {
-            int num_transicoes = 0;
 
             transicoes.put(this.estados.get(i), new ArrayList<>());
 
-            // Loop para o número de transições
-            while (true) {
-                try {
-                    System.out.print("Quantas transições o estado " + this.estados.get(i) + " possui: ");
-                    num_transicoes = scanner.nextInt();
-                    scanner.nextLine(); // Limpar o buffer após nextInt()
-                    if (num_transicoes >= 0 && num_transicoes == this.alfabeto.size()) {
-                        break; // Sai do loop se o número de transições for válido
-                    } else if (num_transicoes != this.alfabeto.size()) {
-                        System.out.println("O número de transições deve ser igual ao tamanho do alfabeto.");
-                        System.out.println("--------------------------------------");
-                        atraso(250);
-                    } else {
-                        System.out.println("O número de transições não pode ser negativo ou zero.");
-                        System.out.println("--------------------------------------");
-                        atraso(250);
-                    }
-                } catch (InputMismatchException e) {
-                    System.out.println("Entrada inválida! Por favor, digite um número inteiro.");
-                    scanner.nextLine(); // Limpa a entrada inválida do buffer
-                    System.out.println("--------------------------------------");
-                    atraso(250);
-                }
-            }
-
             // Loop para as transições
-            for (int j = 0; j < num_transicoes; j++) {
-                String destino = "";
+            for (int j = 0; j < alfabeto.size(); j++) {
                 System.out.println("--------------------------------------");
                 System.out.println("Estado atual: " + this.estados.get(i));
-
-                // Loop para o estado de destino da transição
-                while (true) {
-                    try {
-                        System.out.print("Símbolo: " + alfabeto.get(j) + "\nEstado de Destino: ");
-                        destino = scanner.nextLine();
-                        if (!destino.isEmpty() && this.estados.contains(destino)) {
-                            break; // Sai do loop se o destino for válido
-                        } else if (!this.estados.contains(destino)) {
-                            System.out.println("O estado de destino deve estar na lista de estados.");
-                            System.out.println("Estados: " + this.estados);
-                            System.out.println("--------------------------------------");
-                            atraso(250);
-                        } else {
-                            System.out.println("O estado de destino não pode ser vazio.");
+                
+                
+                if (this.determinístico){
+                    String destino = "";
+                    // Loop para o estado de destino da transição
+                    while (true) {
+                        try {
+                            System.out.print("Símbolo: " + alfabeto.get(j) + "\nEstado de Destino: ");
+                            destino = scanner.nextLine();
+                            if (!destino.isEmpty() && this.estados.contains(destino)) {
+                                break; // Sai do loop se o destino for válido
+                            //Adicionar casos que comtemplem o estado de erro
+                            } else if (!this.estados.contains(destino)) {
+                                System.out.println("O estado de destino deve estar na lista de estados.");
+                                System.out.println("Estados: " + this.estados);
+                                System.out.println("--------------------------------------");
+                                atraso(250);
+                            } else {
+                                System.out.println("O estado de destino não pode ser vazio.");
+                                System.out.println("--------------------------------------");
+                                atraso(250);
+                            }
+                        } catch (Exception e) {
+                            System.out.println("Erro ao inserir o estado de destino.");
+                            scanner.nextLine(); // Limpa a entrada inválida do buffer
                             System.out.println("--------------------------------------");
                             atraso(250);
                         }
-                    } catch (Exception e) {
-                        System.out.println("Erro ao inserir o estado de destino.");
-                        scanner.nextLine(); // Limpa a entrada inválida do buffer
-                        System.out.println("--------------------------------------");
-                        atraso(250);
                     }
+                    transicoes.get(this.estados.get(i)).add(alfabeto.get(j) + " -> " + destino);
                 }
-
-                transicoes.get(this.estados.get(i)).add(alfabeto.get(j) + " -> " + destino);
+                else {
+                    String destino = "";
+                    // Loop para o estado
+                    while (true) {
+                        try {
+                            System.out.print("Símbolo: " + alfabeto.get(j) + "\nEstado de Destino: ");
+                            destino = scanner.nextLine();
+                            destino = destino.toUpperCase();
+                            if (!destino.isEmpty() && this.estados.contains(destino)) {
+                                break; // Sai do loop se o destino for válido
+                            } else if (List.of(lista_estado_erro).contains(destino) || destino.isEmpty()) {
+                                destino = "ERRO";
+                                break;
+                            } else {
+                                System.out.println("Entrada inválida.");
+                                System.out.println("--------------------------------------");
+                                atraso(250);
+                            }
+                        } catch (Exception e) {
+                            System.out.println("Erro ao inserir o estado de destino.");
+                            scanner.nextLine(); // Limpa a entrada inválida do buffer
+                            System.out.println("--------------------------------------");
+                            atraso(250);
+                        }
+                    }
+                    transicoes.get(this.estados.get(i)).add(alfabeto.get(j) + " -> " + destino);
+                }
             }
             System.out.println("--------------------------------------");
         }
@@ -234,5 +244,17 @@ public class Input_Terminal {
 
         Set <String> lista_final = new HashSet<>(lista_tratada);
         return new ArrayList<>(lista_final);
+    }
+
+    public void Tipo_Determinismo(List<String> Incias, List<String> Finais) {
+        //Criar mais formas para determinar se o automato é deterministico
+        
+        if ((Incias.size() > 1) || (Finais.size() > 1)) { // O autômato é não determinístico
+            this.determinístico = false;
+        }
+        else { // O autômato é determinístico
+            this.determinístico = true;
+        }
+        
     }
 }

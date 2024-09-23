@@ -15,33 +15,37 @@ public class Main {
         List<String> alfabeto = new ArrayList<>();
         Map<String, List<String>> transicoes;
 
+        Menus menu = new Menus(scanner);
         Input_Terminal input = new Input_Terminal(scanner);
 
         // Parte inicial do programa com tratamento de erros
+        System.out.println("\n\n--------------------------------------");
         System.out.println("Bem vindo ao gerador de esquemas de autômatos finitos!\nPara começar, registre o autômato.");
         System.out.println("--------------------------------------");
+        menu.Menu_Instruções();
 
         input.estados();
         input.alfabeto();
-        alfabeto = input.alfabeto;
-        transicoes = input.transicoes();
         estado_inicial = input.estado_inicial();
         estado_final = input.estado_final();
+        input.Tipo_Determinismo(estado_inicial, estado_final);
+        alfabeto = input.alfabeto;
+        transicoes = input.transicoes();
 
         System.out.println("--------------------------------------");
         System.out.println("Autômato registrado com sucesso!\n");
         input.print_all(alfabeto, estado_inicial, estado_final, transicoes);
 
-        Gerador automato = new Gerador(estado_inicial,estado_final,input.get_estados(),alfabeto,transicoes,scanner);
+        Gerador automato = new Gerador(estado_inicial,estado_final,input.get_estados(),alfabeto,transicoes,scanner,input.determinístico);
         //automato.print_all();
         
-        Salvar_Arquivo(scanner,automato.gerador_String_AFD());
+        Salvar_Arquivo(scanner,automato.gerador_String_AFD(),menu);
         scanner.close();
     }
 
 
     // Função para salvar o arquivo
-    public static void Salvar_Arquivo(Scanner leitor, String conteudo) throws IOException {
+    public static void Salvar_Arquivo(Scanner leitor, String conteudo, Menus menu) throws IOException {
         String nomeArquivo;
         String salvar;
 
@@ -66,7 +70,6 @@ public class Main {
         // Se o usuário escolher 'N', cancela a operação
         if (salvar.equals("N")) {
             System.out.println("Operação cancelada. O arquivo não foi salvo.");
-            Menus menu = new Menus(leitor);
             menu.Menu_Reinicia();
         }
 

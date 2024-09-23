@@ -61,7 +61,7 @@ public class Menus {
                 } else {
                     System.out.println("Opção inválida.");
                     System.out.println("--------------------------------------");
-                    atraso(500);
+                    atraso(250);
                 }
             } catch (Exception e) {
                 System.out.println("Erro ao inserir a opção.");
@@ -70,5 +70,67 @@ public class Menus {
             }
         }
         Main.main("-r, -i".split(", "));
+    }
+
+    public void Menu_Instruções() {
+        while (true) {
+            try {
+                System.out.print("Deseja ver as instruções? (S/N): ");
+                String instrucoes = this.scanner.nextLine();
+                instrucoes = instrucoes.toUpperCase();
+                if (instrucoes.equals("S") || instrucoes.equals("N") && !instrucoes.isEmpty()) {
+                    if (instrucoes.equals("S")) {
+                        System.out.println("Instruções:");
+                        System.out.println("--------------------------------------");
+                        System.out.println("1. Sempre que precisar passar uma lista de elementos, separe-os por vírgula ou espaço.");
+                        System.out.println("2. O programa desconsidera estados e simbolos do alfabeto duplicados.");
+                        System.out.println("3. Para transições que não existem no autômato, digite no campo de estado de destino 'null', 'não' ,'n', ' ' e não digitar nada.");
+                        System.out.println("   Dessa forma, se a máquina de estados for determinística, o programa irá criar um estado de erro.");
+                        System.out.println("   Se a máquina de estados for não determinística, o programa irá ignorar a transição.");
+                        
+                        //Boa ideia para o futuro
+                        //System.out.println("4. Para transições que vão para mais de um estado, separe os estados por vírgula ou espaço.");
+                        System.out.println("--------------------------------------");
+                        while (true) {
+                            try{
+                                System.out.print("Deseja continuar? (S/N): ");
+                                String continuar = this.scanner.nextLine();
+                                continuar = continuar.toUpperCase();
+                                if (continuar.equals("S") || continuar.equals("N") && !continuar.isEmpty()) {
+                                    if (continuar.equals("S")) {
+                                        break;
+                                    } else {
+                                        System.out.println("Encerrando o programa...");
+                                        System.out.println("--------------------------------------");
+                                        System.exit(0);
+                                    }
+                                } else {
+                                    System.out.println("Opção inválida.");
+                                    System.out.println("--------------------------------------");
+                                    atraso(250);
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Erro ao inserir a opção.");
+                                this.scanner.nextLine(); // Limpa a entrada inválida do buffer
+                                System.out.println("--------------------------------------");
+                            }
+                        }
+                        break;
+                    } else {
+                        System.out.println("--------------------------------------");
+                        break;
+                    }
+                } else {
+                    System.out.println("Opção inválida.");
+                    System.out.println("--------------------------------------");
+                    atraso(250);
+                }
+            } catch (Exception e) {
+                System.out.println("Erro ao inserir a opção.");
+                this.scanner.nextLine(); // Limpa a entrada inválida do buffer
+                System.out.println("--------------------------------------");
+            }
+            
+        }
     }
 }
