@@ -72,8 +72,8 @@ public class Input_Terminal {
                 atraso(250);
             }
         }
-        string_bruta = string_bruta.replace(" ", ",");
-        return List.of(string_bruta.split(","));
+        
+        return tratamento_lista(string_bruta);
     }
 
     public Map<String, List<String>> get_transicoes() {
@@ -111,8 +111,8 @@ public class Input_Terminal {
                     while (true) {
                         try {
                             System.out.print("Símbolo: " + alfabeto.get(j) + "\nEstado de Destino: ");
-                            destino = scanner.nextLine();
-                            destino = destino.toUpperCase();
+                            destino = scanner.nextLine().toUpperCase();
+                            
                             if (!destino.isEmpty() && this.estados.contains(destino)) {
                                 break; // Sai do loop se o destino for válido
                             } else if (List.of(lista_estado_erro).contains(destino) || destino.isEmpty()) {
@@ -217,6 +217,7 @@ public class Input_Terminal {
         List <String> lista_tratada = new ArrayList<>();
 
         lista_bruta = lista_bruta.replace(" ", ",");
+        lista_bruta = lista_bruta.replace(",,", ",");
         lista_tratada = List.of(lista_bruta.split(","));
 
         if (lista_tratada.contains("")) {
