@@ -31,7 +31,6 @@ public class Main {
         alfabeto = input.alfabeto;
         transicoes = input.get_transicoes();
 
-        System.out.println("--------------------------------------");
         System.out.println("Autômato registrado com sucesso!\n");
         input.print_all(alfabeto, estado_inicial, estado_final, transicoes);
 

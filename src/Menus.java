@@ -84,12 +84,10 @@ public class Menus {
                         System.out.println("--------------------------------------");
                         System.out.println("1. Sempre que precisar passar uma lista de elementos, separe-os por vírgula ou espaço.");
                         System.out.println("2. O programa desconsidera estados e simbolos do alfabeto duplicados.");
-                        System.out.println("3. Para transições que não existem no autômato, digite no campo de estado de destino 'null', 'não' ,'n', ' ' e não digitar nada.");
+                        System.out.println("3. Para transições que não existem no autômato, digite no campo de estado de destino 'null', 'não' e 'n'");
                         System.out.println("   Dessa forma, se a máquina de estados for determinística, o programa irá criar um estado de erro.");
                         System.out.println("   Se a máquina de estados for não determinística, o programa irá ignorar a transição.");
-                        
-                        //Boa ideia para o futuro
-                        //System.out.println("4. Para transições que vão para mais de um estado, separe os estados por vírgula ou espaço.");
+                        System.out.println("4. Para transições que vão para mais de um estado, separe os estados por vírgula ou espaço.");
                         System.out.println("--------------------------------------");
                         while (true) {
                             try{

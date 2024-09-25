@@ -25,6 +25,8 @@ public class Gerador {
     }
 
     public String Agrupar(List<String> arquivoStringAuxList) {
+        //  LEMBRETE:
+        //  Tratar de transições com mais de um estado de destino
         
         Map<String, Map<String, List<String>>> agrupamento = new LinkedHashMap<>();
         StringBuilder resultado = new StringBuilder(); // StringBuilder para armazenar o resultado
