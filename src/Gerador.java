@@ -25,8 +25,6 @@ public class Gerador {
     }
 
     public String Agrupar(List<String> arquivoStringAuxList) {
-        //  LEMBRETE:
-        //  Tratar de transições com mais de um estado de destino
         
         Map<String, Map<String, List<String>>> agrupamento = new LinkedHashMap<>();
         StringBuilder resultado = new StringBuilder(); // StringBuilder para armazenar o resultado
@@ -35,12 +33,20 @@ public class Gerador {
         for (String transicao : arquivoStringAuxList) {
             // Dividindo a string na parte "estadoOrigem -> estadoDestino" e "símbolo"
             transicao = transicao.trim();
-            String[] partes = transicao.split(" ");
+            String[] partes = transicao.replace("[","").replace("]","").replace(",","").split(" ");
             String estadoOrigem = partes[0];
-            String estadoDestino = partes[2];
-            String simbolo = partes[4];
+            List<String> estadosDestino = new ArrayList<>();
+
+            int i = 2;
+
+            while (!partes[i].equals("|")) {
+                estadosDestino.add(partes[i]);
+                i++;
+            }
+            String simbolo = partes[i+1];
 
             // Agrupar os símbolos pelo estado de origem e destino
+            String estadoDestino = String.join(" ", estadosDestino);
             agrupamento
                     .computeIfAbsent(estadoOrigem, k -> new LinkedHashMap<>())
                     .computeIfAbsent(estadoDestino, k -> new ArrayList<>())
@@ -67,7 +73,7 @@ public class Gerador {
         return transicoesAgrupadas;
     }
 
-    public String gerador_String_AFD() {
+    public String gerador_String() {
         String arquivoString = "";
         String aux = "";
         arquivoString += "Q:";
@@ -94,7 +100,6 @@ public class Gerador {
             }
         }
 
-
         Menus menu = new Menus(scanner);
         String escolha = menu.Menu_Agrupa();
         
@@ -108,30 +113,9 @@ public class Gerador {
 
         arquivoString += "---\n";
 
-        while (true) {
-            try {
-                System.out.println("Deseja imprimir o esquma no terminal? (S/N): ");
-                String imprimir = scanner.nextLine();
-                imprimir = imprimir.toUpperCase();
-                System.out.println("--------------------------------------\n");
-                if (imprimir.equals("S") || imprimir.equals("N") && !imprimir.isEmpty()) {
-                    if (imprimir.equals("S")) {
-                        System.out.println(arquivoString);
-                        System.out.println("--------------------------------------");
-                        break;
-                    }
-                    break;
-                } else {
-                    System.out.println("Opção inválida.");
-                    System.out.println("--------------------------------------");
-                }
-            } catch (Exception e) {
-                System.out.println("Erro ao inserir a opção.");
-                scanner.nextLine(); // Limpa a entrada inválida do buffer
-                System.out.println("--------------------------------------");
-            }
-        }
-
+        menu.atraso(500);
+        System.out.println(arquivoString);
+        System.out.println("--------------------------------------");
         return arquivoString;
     }
 

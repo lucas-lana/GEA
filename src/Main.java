@@ -37,7 +37,7 @@ public class Main {
         Gerador automato = new Gerador(estado_inicial,estado_final,input.estados,alfabeto,transicoes,scanner,input.determinístico);
         //automato.print_all();
         
-        Salvar_Arquivo(scanner,automato.gerador_String_AFD(),menu);
+        Salvar_Arquivo(scanner,automato.gerador_String(),menu);
         scanner.close();
     }
 

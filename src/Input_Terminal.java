@@ -29,11 +29,16 @@ public class Input_Terminal {
     }
 
     public void get_alfabeto(){
+        System.out.println("Caso deseje adicionar um símbolo vazio ao alfabeto, se há uma transição sem símbolo (Transição Épsilon),");
+        System.out.println("digite '@' ou 'λ', para ser o síbolo deste tipo de transição.");
         this.alfabeto = get_lista("símbolos do alfabeto");
         if (this.alfabeto.contains("")) {
             this.alfabeto.remove(alfabeto.indexOf(""));
         }
-
+        if (this.alfabeto.contains("@")) {
+            this.alfabeto.remove(alfabeto.indexOf("@"));
+            this.alfabeto.add("λ");
+        }
     }
 
     public void get_estados() {
@@ -88,9 +93,10 @@ public class Input_Terminal {
     public Map<String, List<String>> get_transicoes() {
         Map<String, List<String>> transicoes = new HashMap<>();
         System.out.println("--------------------------------------");
-        System.out.println("Instruções para as transições:\nCaso o estado de destino de uma transição não exista,");
-        System.out.println("pode ser digitado" + Arrays.toString(this.lista_estado_erro) + "\n.Dessa forma, o programa irá criar um estado de erro.");
-        //atraso(500);
+        System.out.println("Instruções para as transições:\n    1. Caso o estado de destino de uma transição não exista,");
+        System.out.println("pode ser digitado " + Arrays.toString(this.lista_estado_erro).toLowerCase() + ".\nDessa forma, o programa irá criar um estado de erro.\n");
+        System.out.println("    2. Para transições sem símbolo, o símbolo da transição será 'λ'.\nSe não houver transição vazia do estado atual, apenas aperte enter.");
+        atraso(500);
 
         for (int i = 0; i < this.estados.size(); i++) {
 
@@ -130,7 +136,7 @@ public class Input_Terminal {
                                 break; // Sai do loop se o destino for válido
                             } 
                             
-                            else if (((!match_elemento.isEmpty()) || entrada.isEmpty() || mul_destino.contains("") || contemPeloMenosUmElemento(mul_destino, this.estados)) && invalido_elemento.isEmpty()) {
+                            else if (((!match_elemento.isEmpty()) || mul_destino.contains("") || contemPeloMenosUmElemento(mul_destino, this.estados)) && invalido_elemento.isEmpty()) {
                                 if (!this.estados.contains("ERRO")) {
                                     this.estados.add("ERRO");
                                     mul_destino.add("ERRO");
@@ -141,7 +147,11 @@ public class Input_Terminal {
                                 Set <String> destino_final = new HashSet<>(mul_destino);
                                 mul_destino = new ArrayList<>(destino_final);
                                 break;
-                            } 
+                            }
+
+                            else if (entrada.isEmpty()) {
+                                break; // Sai do loop se a entrada for vazia
+                            }
                             
                             else {
                                 System.out.println("--------------------------------------");
@@ -159,11 +169,14 @@ public class Input_Terminal {
                             atraso(250);
                         }
                     }
-                    if (mul_destino.size() == 1) {
-                        transicoes.get(this.estados.get(i)).add(alfabeto.get(j) + " -> " + mul_destino.get(0));
-                    } else {
-                        this.determinístico = false;
-                        transicoes.get(this.estados.get(i)).add(alfabeto.get(j) + " -> " + mul_destino);
+
+                    if (!entrada.isEmpty()) {
+                        if (mul_destino.size() == 1) {
+                            transicoes.get(this.estados.get(i)).add(alfabeto.get(j) + " -> " + mul_destino.get(0));
+                        } else {
+                            this.determinístico = false;
+                            transicoes.get(this.estados.get(i)).add(alfabeto.get(j) + " -> " + mul_destino);
+                        }
                     }
                 }
             }
@@ -177,6 +190,10 @@ public class Input_Terminal {
         // Loop para o estado inicial
         while (true) {
             try {
+                if (this.estados.size() == 1) {
+                    estados_iniciais.add(this.estados.get(0));
+                    break;
+                }
                 System.out.print("Digite o(s) estado(s) inicial(ais) do autômato, separados por vírgula ou espaço: ");
                 estados_iniciais = tratamento_lista(scanner.nextLine(),"N");
                 if (!estados_iniciais.isEmpty() && this.estados.containsAll(estados_iniciais)) {
@@ -206,6 +223,10 @@ public class Input_Terminal {
         // Loop para o estado final
         while (true) {
             try {
+                if (this.estados.size() == 1) {
+                    estados_finais.add(this.estados.get(0));
+                    break;
+                }
                 System.out.print("Digite o(s) estado(s) final(ais) do autômato: ");
                 estados_finais = tratamento_lista(scanner.nextLine(),"N");
                 if (!estados_finais.isEmpty() && this.estados.containsAll(estados_finais)) {
@@ -233,10 +254,31 @@ public class Input_Terminal {
     public void print_all(List<String> alfabeto, List<String> estado_inicial, List<String> estado_final, Map<String,List<String>> transicoes) {
         System.out.println("------ Informações do autômato ------");
         System.out.println("Quantidade de estados: " + this.estados.size());
-        System.out.println("Estado(s): " + this.estados);
-        System.out.println("Alfabeto: " + alfabeto);
-        System.out.println("Estado inicial: " + estado_inicial);
-        System.out.println("Estado final: " + estado_final);
+        
+        if (this.estados.size() == 1) {
+            System.out.println("Estado: " + this.estados.get(0));
+        } else {
+            System.out.println("Estados: " + this.estados);
+        }
+
+        if (this.alfabeto.size() == 1) {
+            System.out.println("Símbolo do alfabeto: " + this.alfabeto.get(0));
+        } else {
+            System.out.println("Símbolos do alfabeto: " + this.alfabeto);
+        }
+
+        if (estado_inicial.size() == 1) {
+            System.out.println("Estado inicial: " + estado_inicial.get(0));
+        } else {
+            System.out.println("Estados iniciais: " + estado_inicial);
+        }
+
+        if (estado_final.size() == 1) {
+            System.out.println("Estado final: " + estado_final.get(0));
+        } else {
+            System.out.println("Estados finais: " + estado_final);
+        }
+        
         for (Map.Entry<String, List<String>> entry : transicoes.entrySet()) {
             System.out.println("Transições do estado " + entry.getKey() + ": " + entry.getValue());
         }

@@ -10,7 +10,7 @@ public class Menus {
         this.scanner = scanner;
     }
 
-    private void atraso(int tempo) {
+    public void atraso(int tempo) {
         try {
             Thread.sleep(tempo);
         } catch (InterruptedException e) {
@@ -37,7 +37,7 @@ public class Menus {
                 System.out.println("--------------------------------------");
             }
         }
-        System.out.println("--------------------------------------");
+        System.out.println("--------------------------------------\n");
         return agrupaString;
     }   
 
@@ -88,6 +88,9 @@ public class Menus {
                         System.out.println("   Dessa forma, se a máquina de estados for determinística, o programa irá criar um estado de erro.");
                         System.out.println("   Se a máquina de estados for não determinística, o programa irá ignorar a transição.");
                         System.out.println("4. Para transições que vão para mais de um estado, separe os estados por vírgula ou espaço.");
+                        System.out.println("5. Transições vazias, transições Épsilon, serão contempladas se digitar '@' ou 'λ' ao infomar os símbolos do alfabeto da máquina.");
+                        //POSSÍVEL IMPLEMENTAÇÃO FUTURA
+                        //System.out.println("N. Para transições que vão para todos os estados, digite 'all' no campo de estado de destino.");
                         System.out.println("--------------------------------------");
                         while (true) {
                             try{
